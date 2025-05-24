@@ -2,7 +2,7 @@
 #include "process.h"
 #include "scheduler.h"
 
-#define NUM_PROCESS 10
+#define NUM_PROCESS 4
 
 int main() {
 
@@ -18,8 +18,11 @@ int main() {
 
     switch (choice) {
         case 1:
-            scheduler_FCFS(ps, NUM_PROCESS);
-            break;
+            scheduler_np(ps, NUM_PROCESS, PRIOR_FCFS); break;
+        case 2:
+            scheduler_np(ps, NUM_PROCESS, PRIOR_SJF); break;
+        case 3:
+            scheduler_np(ps, NUM_PROCESS, PRIOR_PRIORITY); break;
         default:
             printf("Invalid\n");
     }
