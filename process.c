@@ -1,5 +1,6 @@
 #include "process.h"
 #include <time.h>
+#include <stdlib.h>
 
 void new_processes(Process ps[], int n) {
     srand(time(NULL));
@@ -29,4 +30,6 @@ void new_processes(Process ps[], int n) {
 
         ps[i].state = READY;
     }
+
+    return;
 }

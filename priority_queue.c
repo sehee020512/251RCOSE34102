@@ -1,46 +1,60 @@
 #include "priority_queue.h"
-#include <stdbool.h>
 #include <stdio.h>
 
-/* circular queue 
-enqueue from rear
-dequeue from front
-data out <- front ... data ... rear <- data in */
-
 void init_queue(Queue *q) {
-    q->front = 0;
-    q->rear = 0;
+    q->size = 0;
+    q->id = 0;
 }
 
 bool is_empty(Queue *q) {
-    return q->front == q->rear;
+    return q->size == 0;
 }
 
-bool is_full(Queue *q) {
-    return (q->rear + 1) % MAX == q->front;
-}
+void enqueue(Queue *q, Node node) {
+    if (q->size >= MAX) {
+        fprintf(stderr, "error: queue overflow\n");
+        return; }
 
-void enqueue(Queue *q, int value) {
-    // check whether queue is full
-    // queue is not full
-    if (!is_full(q)) {
-        q->data[q->rear] = value;
-        q->rear = (q->rear + 1) % MAX;
+    node.order = q->id++;
+
+    int i = q->size - 1; // last id
+
+    while (i >= 0 &&
+          // compare prority
+          (q->data[i].prior > node.prior ||
+          // if priority is same, compare order
+          (q->data[i].prior == node.prior && q->data[i].order > node.order))) {
+        q->data[i + 1] = q->data[i];
+        i--;
     }
-    // queue is full
-    fprintf(stderr, "error: queue is full\n");
+
+    q->data[i + 1] = node;
+    q->size++;
+
+    //
+    //printf("Enqueue: pid=%d, prior=%d, order=%d\n", node.pid, node.prior, node.order);
+    //
+
+    return;
 }
 
-int dequeue(Queue *q) {
-    // check whether queue is empty
-    // queue is not empty
-    if (!is_empty(q)) {
-        int value = q->data[q->front];
-        q->front = (q->front + 1) % MAX;
-        return value;
+Node dequeue(Queue *q) {
+    if (is_empty(q)) {
+        fprintf(stderr, "error : queue underflow\n");
+        Node dummy = {-1, -1, -1};
+        return dummy;
     }
-    // queue is empty
-    fprintf(stderr, "error: queue is empty\n");
-    
-    return -1;
+    Node top = q->data[0]; // highest priority
+
+    // shift
+    for (int i = 1; i < q->size; i++) {
+        q->data[i - 1] = q->data[i]; }
+
+    q->size--;
+
+    //
+    //printf("Dequeue: pid=%d, prior=%d, order=%d\n", top.pid, top.prior, top.order);
+    //
+
+    return top;
 }
