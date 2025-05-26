@@ -4,17 +4,18 @@
 #include "process.h"
 
 typedef enum {
-    PRIOR_FCFS,
-    PRIOR_SJF,
-    PRIOR_PRIORITY
-} PriorMode;
+    NONPREEMPT_FCFS,
+    NONPREEMPT_SJF,
+    NONPREEMPT_PRIORITY
+} NonpreemptMode;
 
-void scheduler_np(Process ps[], int n, PriorMode mode);
-void scheduler_FCFS(Process ps[], int n);
-void scheduler_SJF_np(Process ps[], int n);
-void scheduler_SJF_p(Process ps[], int n);
-void scheduler_Priority_np(Process ps[], int n);
-void scheduler_Priority_p(Process ps[], int n);
-void scheduler_RB(Process ps[], int n, int qt);
+typedef enum {
+    PREEMPT_SJF,
+    PREEMPT_PRIORITY
+} PreemptMode;
+
+void scheduler_np(Process ps[], int n, NonpreemptMode mode);
+void scheduler_p(Process ps[], int n, PreemptMode mode);
+void scheduler_rr(Process ps[], int n);
 
 #endif

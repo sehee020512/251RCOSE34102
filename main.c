@@ -18,11 +18,17 @@ int main() {
 
     switch (choice) {
         case 1:
-            scheduler_np(ps, NUM_PROCESS, PRIOR_FCFS); break;
+            scheduler_np(ps, NUM_PROCESS, NONPREEMPT_FCFS); break;
         case 2:
-            scheduler_np(ps, NUM_PROCESS, PRIOR_SJF); break;
+            scheduler_np(ps, NUM_PROCESS, NONPREEMPT_SJF); break;
         case 3:
-            scheduler_np(ps, NUM_PROCESS, PRIOR_PRIORITY); break;
+            scheduler_np(ps, NUM_PROCESS, NONPREEMPT_PRIORITY); break;
+        case 4:
+            scheduler_p(ps, NUM_PROCESS, PREEMPT_SJF); break;
+        case 5:
+            scheduler_p(ps, NUM_PROCESS, PREEMPT_PRIORITY); break;
+        case 6:
+            scheduler_rr(ps, NUM_PROCESS); break;
         default:
             printf("Invalid\n");
     }

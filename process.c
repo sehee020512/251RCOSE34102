@@ -24,6 +24,7 @@ void new_processes(Process ps[], int n) {
         ps[i].waiting_time = 0;
         ps[i].turnaround_time = 0;
 
+        ps[i].start_time = -1;
         ps[i].completion_time = -1;
         ps[i].io_timer = 0;
 
