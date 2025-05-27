@@ -5,15 +5,15 @@
 #define MAX 100 // ???
 
 typedef struct {
-    int pid;
+    int pid; // process id
     int prior; // lower number, higher priority
     int order; // for stable priority queue regarding enqueue order
 } Node;
 
 typedef struct {
-    Node data[MAX];
-    int size; // current size
-    int id; // pointer
+    Node data[MAX]; // node array
+    int size; // queue size
+    int id; // enqueue order
 } Queue;
 
 void init_queue(Queue *q);

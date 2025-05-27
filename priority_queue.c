@@ -2,8 +2,8 @@
 #include <stdio.h>
 
 void init_queue(Queue *q) {
-    q->size = 0;
-    q->id = 0;
+    q->size = 0; // queue size
+    q->id = 0; // next index
 }
 
 bool is_empty(Queue *q) {
@@ -15,10 +15,11 @@ void enqueue(Queue *q, Node node) {
         fprintf(stderr, "error: queue overflow\n");
         return; }
 
-    node.order = q->id++;
+    node.order = q->id++; // save enqueue order
 
     int i = q->size - 1; // last id
 
+    // insertion sort
     while (i >= 0 &&
           // compare prority
           (q->data[i].prior > node.prior ||
@@ -28,12 +29,8 @@ void enqueue(Queue *q, Node node) {
         i--;
     }
 
-    q->data[i + 1] = node;
-    q->size++;
-
-    //
-    //printf("Enqueue: pid=%d, prior=%d, order=%d\n", node.pid, node.prior, node.order);
-    //
+    q->data[i + 1] = node; // insertion
+    q->size++; // lengthen size
 
     return;
 }
@@ -44,17 +41,14 @@ Node dequeue(Queue *q) {
         Node dummy = {-1, -1, -1};
         return dummy;
     }
-    Node top = q->data[0]; // highest priority
 
-    // shift
+    Node top = q->data[0]; // highest priority node
+
+    // shift after dequeue
     for (int i = 1; i < q->size; i++) {
         q->data[i - 1] = q->data[i]; }
 
-    q->size--;
-
-    //
-    //printf("Dequeue: pid=%d, prior=%d, order=%d\n", top.pid, top.prior, top.order);
-    //
+    q->size--; // shorten size
 
     return top;
 }

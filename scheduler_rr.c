@@ -5,36 +5,38 @@
 
 #define QUANTUM 2
 
-int global_order = 0;
+int global_order = 0; // sorting FIFO queue
 
 void scheduler_rr(Process ps[], int n) {
+
+    // initialization
     Queue ready_q;
     init_queue(&ready_q);
 
     int time = 0;
     int completed = 0;
     int run_pid = -1;
-    int time_slice = 0;
+    int time_slice = 0; // time that current process consumes
     int gantt_chart[1000];
 
     Node node = {-1, -1, -1};
 
     while (completed < n) {
-        // 프로세스 도착
         for (int i = 0; i < n; i++) {
             if (ps[i].arrival_time == time && ps[i].state == READY) {
                 node.pid = ps[i].pid;
                 node.prior = 0;
-                node.order = global_order++;
+                node.order = global_order++; // to keep FIFO
                 enqueue(&ready_q, node);
             }
         }
 
-        // I/O 완료
+        // I/O handling
         for (int i = 0; i < n; i++) {
             if (ps[i].state == WAITING) {
-                ps[i].io_timer--;
+                ps[i].io_timer--; // I/O processes
                 if (ps[i].io_timer <= 0) {
+                    // push back to ready queue
                     ps[i].state = READY;
                     ps[i].io_timer = -1;
                     node.pid = ps[i].pid;
@@ -45,25 +47,27 @@ void scheduler_rr(Process ps[], int n) {
             }
         }
 
-        // 실행 중인 프로세스 처리
+        // run current process
         if (run_pid != -1) {
             Process *p = &ps[run_pid - 1];
             p->remain_time--;
             time_slice++;
 
+            // I/O occurs, push into waiting queue
             if (p->remain_time == (p->cpu_burst_time - p->io_request_time)) {
                 p->state = WAITING;
                 p->io_timer = p->io_burst_time;
                 run_pid = -1;
                 time_slice = 0;
+            // process ends
             } else if (p->remain_time == 0) {
                 p->state = TERMINATED;
                 p->completion_time = time;
                 completed++;
                 run_pid = -1;
                 time_slice = 0;
+            // consumes all the quantum, push into ready queue
             } else if (time_slice == QUANTUM) {
-                // quantum 소진 → 큐 뒤로 이동
                 p->state = READY;
                 node.pid = p->pid;
                 node.prior = 0;
@@ -74,8 +78,9 @@ void scheduler_rr(Process ps[], int n) {
             }
         }
 
-        // 새 프로세스 실행
+        // no running process
         if (run_pid == -1 && !is_empty(&ready_q)) {
+            // run next process in ready queue
             int next_pid = dequeue(&ready_q).pid;
             Process *p = &ps[next_pid - 1];
             p->state = RUNNING;
