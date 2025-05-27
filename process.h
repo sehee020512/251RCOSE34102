@@ -20,6 +20,8 @@ typedef struct {
     int start_time; // time process starts
     int completion_time; // time process is completed
     int io_timer; // remaining i/o time
+    int executed_time;  // 실행 누적 시간
+
 
     State state; // process state
 } Process;

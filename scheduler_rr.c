@@ -3,7 +3,7 @@
 #include "priority_queue.h"
 #include "report.h"
 
-#define QUANTUM 3
+#define QUANTUM 2
 
 int global_order = 0;
 
@@ -58,7 +58,7 @@ void scheduler_rr(Process ps[], int n) {
                 time_slice = 0;
             } else if (p->remain_time == 0) {
                 p->state = TERMINATED;
-                p->completion_time = time + 1;
+                p->completion_time = time;
                 completed++;
                 run_pid = -1;
                 time_slice = 0;

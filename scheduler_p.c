@@ -79,6 +79,8 @@ void scheduler_p(Process ps[], int n, PreemptMode mode) {
             }
         }
 
+        gantt_chart[time] = run_pid;
+
         // run current process
         if (run_pid != -1) {
             Process *p = &ps[run_pid - 1];
@@ -86,7 +88,7 @@ void scheduler_p(Process ps[], int n, PreemptMode mode) {
 
             if (p->remain_time == (p->cpu_burst_time - p->io_request_time)) {
                 p->state = WAITING;
-                p->io_timer = p->io_burst_time;
+                p->io_timer = p->io_burst_time + 1;
                 run_pid = -1;
             } else if (p->remain_time == 0) {
                 p->state = TERMINATED;
@@ -96,7 +98,6 @@ void scheduler_p(Process ps[], int n, PreemptMode mode) {
             }
         }
 
-        gantt_chart[time] = run_pid;
         time++;
     }
 

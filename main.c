@@ -2,7 +2,7 @@
 #include "process.h"
 #include "scheduler.h"
 
-#define NUM_PROCESS 4
+#define NUM_PROCESS 3
 
 int main() {
 

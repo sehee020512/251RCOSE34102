@@ -23,7 +23,7 @@ void scheduler_np(Process ps[], int n, NonpreemptMode mode) {
                 node.pid = ps[i].pid;
                 switch (mode) {
                     case 0: node.prior = ps[i].arrival_time; break; // FCFS
-                    case 1: node.prior = ps[i].cpu_burst_time; break; // SJF
+                    case 1: node.prior = ps[i].remain_time; break; // SJF
                     case 2: node.prior = ps[i].priority; break; } // Priority           
                 enqueue(&ready_q, node);
             }
@@ -39,7 +39,7 @@ void scheduler_np(Process ps[], int n, NonpreemptMode mode) {
                     node.pid = ps[i].pid;
                     switch (mode) {
                         case 0: node.prior = ps[i].arrival_time; break;
-                        case 1: node.prior = ps[i].cpu_burst_time; break;
+                        case 1: node.prior = ps[i].remain_time; break;
                         case 2: node.prior = ps[i].priority; break; } 
                     enqueue(&ready_q, node);
                 }
@@ -59,7 +59,7 @@ void scheduler_np(Process ps[], int n, NonpreemptMode mode) {
 
             else if (p->remain_time == 0) {
                 p->state = TERMINATED;
-                p->completion_time = time + 1;
+                p->completion_time = time;
                 completed ++;
                 run_pid = -1;
             }
