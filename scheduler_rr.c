@@ -5,8 +5,6 @@
 
 #define QUANTUM 2
 
-int global_order = 0; // sorting FIFO queue
-
 void scheduler_rr(Process ps[], int n) {
 
     // initialization
@@ -26,7 +24,6 @@ void scheduler_rr(Process ps[], int n) {
             if (ps[i].arrival_time == time && ps[i].state == READY) {
                 node.pid = ps[i].pid;
                 node.prior = 0;
-                node.order = global_order++; // to keep FIFO
                 enqueue(&ready_q, node);
             }
         }
@@ -41,7 +38,6 @@ void scheduler_rr(Process ps[], int n) {
                     ps[i].io_timer = -1;
                     node.pid = ps[i].pid;
                     node.prior = 0;
-                    node.order = global_order++;
                     enqueue(&ready_q, node);
                 }
             }
@@ -71,7 +67,6 @@ void scheduler_rr(Process ps[], int n) {
                 p->state = READY;
                 node.pid = p->pid;
                 node.prior = 0;
-                node.order = global_order++;
                 enqueue(&ready_q, node);
                 run_pid = -1;
                 time_slice = 0;
